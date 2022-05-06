@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVVM模型</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        MVVM模型：
+            1.M：模型（model），data中的数据
+            2.V：视图（view），模板代码
+            3.VM：视图模型（ViewModel），vue实例
+        
+        观察发现：
+            1.data中所有的属性，最后都会出现 vm 身上
+            2.vm身上所有的属性 及 vue原型上所有的属性，在vue模板中都可以直接使用
+     -->
+
+    <div id="root">
+        <h1>{{school.name}}</h1>
+        <h1>{{school.address}}</h1>
+        <!-- <h1>{{$options}}</h1> -->
+        <!-- <h1>{{$emit}}</h1> -->
+        <h1>{{_c}}</h1>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    school: {
+                        name: '尚硅谷',
+                        address: '北京'
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

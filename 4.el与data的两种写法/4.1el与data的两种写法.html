@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>el与data的两种写法</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        data与el的两种写法
+            1.el的两种写法：
+                (1) new Vue实例创建时配置 el属性
+                (2) 先创建Vue实例，随后再通过vm.$mount('#root')指定el的值
+            2.data的两种写法：
+                (1) 对象形式
+                (2) 函数式
+                如何选择：目前使用哪种方式都可以，后期学习组件时，data必须使用函数式，否则会报错
+            3.一个重要的原则：
+                由Vue管理的函数，一定不要写成箭头函数，否则this指向的不再时vue实例对象了
+     -->
+    <script>
+        var vm = new Vue({
+            // el和data的第一种写法
+            el: '#root',
+            data: {
+                name: '张三'
+            }
+        })
+
+        var vm = new Vue({
+            // data的第二种写法
+            data() {
+                return {
+                    name: '张三'
+                }
+            }
+        })
+        // el的第二种写法
+        vm.$mount('#root')
+    </script>
+</body>
+
+</html>

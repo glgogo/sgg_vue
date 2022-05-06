@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回顾Object.defineProperty()函数</title>
+</head>
+
+<body>
+    <script>
+        let number = 18;
+        let person = {
+            name: '张三',
+            gender: '男',
+        }
+
+        Object.defineProperty(person, 'age', {
+            // value: 20,  //固定写法：value：20 ，相当于给添加的属性 age 赋值
+            // enumerable: true,  //是否可以被枚举，默认为 false
+            // writable: true,  //是否可以被修改，默认为false
+            // configurable: true, //是否可以被删除，默认为false
+
+            // 当有人读取person中的age属性时，get函数就会被调用，且返回值就是age的值
+            get() {
+                console.log('有人读取了age属性');
+                return number;
+            },
+
+            // 当有人修改了person中的age属性，set函数就会被调用，且会收到修改后的具体值
+            set(value) {
+                console.log('有人修改了age属性，且值为：' + value)
+                number = value;
+            }
+        })
+        // 使用控制台 输出 person.age 会触发get函数，使用 person.age =xx 会触发set函数
+    </script>
+</body>
+
+</html>
