@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姓名案例-差值语法方式实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <h2>学生信息</h2>
+        姓：<input type="text" v-model="fristName"></input><br /><br />
+        名：<input type="text" v-model="lastName"></input><br /><br />
+        <!-- 返回一个 fullName()函数的调用  连续输出5次，即调用methods 中 fullName 5次-->
+        全名：<span>{{fullName()}}</span>
+        全名：<span>{{fullName()}}</span>
+        全名：<span>{{fullName()}}</span>
+        全名：<span>{{fullName()}}</span>
+        全名：<span>{{fullName()}}</span>
+        全名：<span>{{fullName()}}</span>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    fristName: '张',
+                    lastName: '三'
+                }
+            },
+            methods: {
+                fullName() {
+                    console.log('fullName 被调用了')
+                    return this.fristName.slice(0, 3) + '-' + this.lastName
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

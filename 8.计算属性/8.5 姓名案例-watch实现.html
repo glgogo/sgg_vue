@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姓名案例-差值语法方式实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        computed和watch之间的区别：
+            1.computed能完成的功能，watch都可以完成
+            2.watch能完成的功能，computed不一定能完成，例如：watch可以进行异步操作，computed不能进行异步操作
+
+        两个重要的原则：
+            1.所有被vue管理的函数，最好都写成普通函数，这样this的指向才是vm 或 组件实例对象
+            2.所有不被vue管理的函数（定时器的回调函数，ajax的回调函数），最好都写成箭头函数，
+              这样this的指向才是vm 或 组件实例对象。
+     -->
+
+    <div id="root">
+        姓：<input type="text" v-model="fristName"></input><br /><br />
+        名：<input type="text" v-model="lastName"></input><br /><br />
+        <!-- 使用计算属性，虽然连续输出多次调用计算属性fullName属性，但是计算属性 fullName 只执行了一次 -->
+        全名：<span>{{fullName}}</span>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    fristName: '张',
+                    lastName: '三',
+                    fullName: ''
+                }
+            },
+            watch: {
+                fristName: {
+                    immediate: true,
+
+                    handler(newValue, oldValue) {
+                        this.fullName = newValue + '-' + this.lastName;
+                    }
+
+                },
+                lastName: {
+                    immediate: true,
+
+                    handler(newValue, oldValue) {
+                        this.fullName = this.fristName + '-' + newValue;
+                    }
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>

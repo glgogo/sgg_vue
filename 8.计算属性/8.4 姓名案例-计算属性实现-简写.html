@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姓名案例-差值语法方式实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        计算属性：
+            1.定义：要用的属性不存在（data中），需要通过已有的属性计算得来
+            2.原理：底层借助了Objcet.defineproperty(obj,pro_name)方法提供的getter和setter
+            3.get函数什么时候执行
+                (1) 初次读取时会读取一次
+                (2) 当依赖的数据发生改变时会被再次调用
+            4.优势：与methods相比，计算属性内部有缓存机制（复用），效率更高，调试方便
+            5.备注：
+                (1) 计算属性最终出现在vm上，模板可直接按照正常data属性读取使用
+                (2) 如果计算属性要被修改，那必须写 set 函数去响应修改，且 set 中要引起计算时以来的数据发生改变
+                (3) 计算属性不会出现在 _data 上，但会通过计算后出现在 vm 实例身上
+                (4) 计算属性中的getter 和 setter中this指向已维护好，this指向 vue 实例对象 vm
+                (5) 只有不会用到set函数时(即用户不会更改data中属性值)，可以使用简写形式
+                (6) 计算属性靠返回值做计算属性的值，我们无法使用computed实现异步任务，等异步任务执行完毕后再将值返回
+                    所以computed 无法执行异步任务
+     -->
+
+    <div id="root">
+        <h2>学生信息</h2>
+        <!-- 姓：<input type="text" v-model="fristName"></input><br /><br />
+        名：<input type="text" v-model="lastName"></input><br /><br />
+        <!-- 返回一个 fullName()函数的调用 -->
+        <!-- 全名：<span>{{fullName()}}</span> -->
+
+        姓：<input type="text" v-model="fristName"></input><br /><br />
+        名：<input type="text" v-model="lastName"></input><br /><br />
+        <!-- 使用计算属性，虽然连续输出多次调用计算属性fullName属性，但是计算属性 fullName 只执行了一次 -->
+        全名：<span>{{fullName2}}</span>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    fristName: '张',
+                    lastName: '三'
+                }
+            },
+            // methods: {
+            //     fullName() {
+            //         return this.fristName.slice(0, 3) + '-' + this.lastName
+            //     }
+            // },
+
+            computed: {
+                fullName: {
+                    // get()函数有什么作用？当有人读取fullName时，get就会被调用，且返回值作为fullName的值
+                    // get()什么时候调用？1.初次读取fullName时；2.所依赖的数据发生变化时
+                    get() {
+                        console.log('get 被调用了');
+                        return this.fristName.slice(0, 3) + '-' + this.lastName;
+                    },
+
+                    // set()什么时候调用？ 当fullName属性值被修改时会被调用
+                    // 
+                    /*set(val) {
+                        console.log('set 被调用了，修改的值为' + val);
+                        const arr = val.split('-');
+                        this.fristName = arr[0];
+                        this.lastName = arr[1];
+                    }*/
+                },
+
+                // 简写形式
+
+                fullName2: function () {
+                    return this.fristName + '-' + this.lastName;
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>
