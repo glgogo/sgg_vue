@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue监视数据改变的原理_数组</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        在Vue中修改数组中的某个元素一定要用如下方法(以下7中方法共同特点，均可以改变原数组)：
+            1.使用这些API：push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+            2.使用Vue.set()或vm.$set()
+            3.filter、slice等无法改变原数组的方法，可以直接将新数组覆盖原数组达到修改原数组的目的
+            
+            注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据(data 和 _data)对象添加属性
+      -->
+    <div id="root">
+        <ul>
+            <li v-for="(item,index) in school.students">{{item.name}}--{{item.age}}--{{item.sex}}</li>
+        </ul>
+
+        <ul>
+            <li v-for="(item,index) in school.students[0].hobby">{{item}}</li>
+        </ul>
+        <button @click="addHobby">添加爱好：看电影</button>
+        <button @click="updataHobby">更改爱好1：旅游</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    school: {
+                        name: '尚硅谷',
+                        address: '北京',
+                        students: [
+                            {
+                                id: '001',
+                                name: '张三',
+                                age: 18,
+                                sex: '男',
+                                hobby: ['打篮球', '听音乐']
+
+                            },
+                            {
+                                id: '002',
+                                name: '李四',
+                                age: 20,
+                                sex: '男',
+                                hobby: ['吃饭', '开车']
+                            }
+                        ]
+                    }
+                }
+            },
+            methods: {
+                addHobby() {
+                    // 第一种：直接使用数组方法操作数组
+                    // this.school.students[0].hobby.unshift('看电影')
+                    // 第二种：使用Vue.set()方法操作数组属性
+                    // Vue.set(this.school.students[0].hobby, this.school.students[0].hobby.length, '看电影')
+                    // 第三种：使用vm.$set()方法操作数组属性
+                    vm.$set(this.school.students[0].hobby, this.school.students[0].hobby.length, '看电影')
+                },
+                updataHobby() {
+                    // this.school.students[0].hobby.splice(0, 1, '旅游')
+                    // Vue.set(this.school.students[0].hobby, 1, '旅游')
+                    vm.$set(this.school.students[0].hobby, 1, '旅游')
+
+                }
+
+            }
+        })
+    </script>
+</body>
+
+</html>

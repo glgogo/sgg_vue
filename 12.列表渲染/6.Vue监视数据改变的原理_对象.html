@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue监视数据改变的原理</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        Vue监听数据的方式：
+        Vue监视对象中数据的改变，利用递归的方式，只要有对象，不管有多少层级，都利用递归的方式遍历出来
+        并给每一个属性添加getter和setter属性，用于监视数据的获取与变化清空，watch也是利用同样的原理
+        监听属性变化的
+     -->
+    <div id="root">
+        <h2>学校名称：{{school.name}}</h2>
+        <h2>学习地址：{{school.address}}</h2>
+        _______________________________
+        <h3>学生信息</h3>
+
+        <ul>
+            <li v-for="(item,index) in school.students" :key="index">{{item.name}}--{{item.age}}--{{item.sex}}</li>
+        </ul>
+        <button @click="changeSex">改变张三的性别</button>
+        <button @click="changeAge">改变李四的年龄</button>
+        ________________________________
+        <ul>
+            <li v-for="(item,index) in school.students[0].hobby" :key="school.students.id">{{item}}</li>
+            <li v-for="(item,index) in school.students[1].hobby" :key="school.students.id">{{item}}</li>
+        </ul>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    school: {
+                        name: '尚硅谷',
+                        address: '北京',
+                        students: [
+                            {
+                                id: '001',
+                                name: '张三',
+                                age: 18,
+                                sex: '男',
+                                hobby: ['打篮球', '听音乐']
+
+                            },
+                            {
+                                id: '002',
+                                name: '李四',
+                                age: 20,
+                                sex: '男',
+                                hobby: ['吃饭', '开车']
+                            }
+                        ]
+                    }
+                }
+            },
+            methods: {
+                // 响应式改变对象属性
+                changeSex() {
+                    // 第一种：直接属性修改
+                    // this.school.students[0].sex = '女';
+                    // 第二种：使用Vue对象set方法更改属性
+                    // Vue.set(this.school.students[0], 'sex', '女');
+                    // 第三种：使用vm实例化对象$set方法更新属性
+                    vm.$set(this.school.students[0], 'sex', '女');
+
+                },
+                changeAge() {
+                    // this.school.students[1].age = 30;
+                    // Vue.set(this.school.students[1], 'age', 30);
+                    vm.$set(this.school.students[1], 'age', 30);
+
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>

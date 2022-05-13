@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.set()的使用</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        Vue.set()方法的使用：
+            Vue.set(target,property,value)：target表示目标操作对象/数组，property表示属性名称，value表示属性值
+            其中target不能是Vue实例（vm）、Vue实例对象的属性（data、_data）
+
+     -->
+
+    <div id="root">
+        <h2>学习信息</h2>
+        <h3>学习名称：{{school.name}}</h3>
+        <h3>学习地址：{{school.address}}</h3>
+
+        <h2>学生信息</h2>
+        <ul>
+            <li v-for="(item,index) in school.students[0]" :key="school.students.id">{{item}}</li>
+        </ul>
+        <button @click="addSex">添加性别</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    school: {
+                        name: '尚硅谷',
+                        address: '北京',
+                        students: [
+                            {
+                                id: '001',
+                                name: '张三',
+                                age: 18,
+                                hobby: ['打篮球', '听音乐']
+
+                            },
+                        ]
+                    }
+                }
+            },
+            methods: {
+                addSex() {
+                    Vue.set(this.students[0], 'sex', '男')
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

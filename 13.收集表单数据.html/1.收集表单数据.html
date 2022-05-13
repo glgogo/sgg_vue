@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收集表单数据</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        收集表单数据：
+            若：<input type='text' />，则v-model收集的是value值，用户输入的就是vulue值
+            若：<input type='radio' />,则v-model收集的是value值，且要给标签配置value值
+            若：<input type='checkbox' /> 
+                1.没有配置input的value属性，那么收集的就是checked（勾选 或 未勾选 ，收集到的是布尔值）
+                2.配置了input的value属性：
+                    (1).v-model的初始值是非数组，那么收集到的就是checked（勾选 或未勾选，收集到的是布尔值）
+                    (2).v-model的初始值是数组，那么收集到的就是对应勾选的 value 值组成的数组
+            
+            备注：v-model的三个修饰符：
+                1.lazy：失去焦点后再收集数据
+                2.number：收集到的数据转化为有效数字格式
+                3.trim：去除收集到数据两端空格
+     -->
+
+    <div id="root">
+        账号：<input type="text" v-model.trim="userInfo.username"> <br><br>
+        密码：<input type="password" v-model="userInfo.password"> <br><br>
+        密码：<input type="number" v-model.number="userInfo.age"> <br><br>
+        性别：
+        <input type="radio" value="男" name="sex" v-model="userInfo.sex">男
+        <input type="radio" value="女" name="sex" v-model="userInfo.sex">女<br><br>
+        爱好：
+        <input type="checkbox" value="看电影" v-model="userInfo.hobby">看电影
+        <input type="checkbox" value="打游戏" v-model="userInfo.hobby">打游戏
+        <input type="checkbox" value="旅游" v-model="userInfo.hobby">旅游<br><br>
+        城市：
+        <select v-model="userInfo.city">
+            <option value="">请选择城市</option>
+            <option value="北京">北京</option>
+            <option value="上海">上海</option>
+            <option value="广州">广州</option>
+        </select>
+        <br><br>
+        个人介绍：
+        <textarea style="resize: none;" cols="30" rows="10" v-model.lazy="userInfo.descript"></textarea><br><br>
+        <input type="checkbox" v-model="userInfo.agree">请认真阅读《注册须知》<br><br>
+        <button @click="submitUserInfo">提交注册</button>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    // 定义收集用户信息对象
+                    userInfo: {
+                        username: '',
+                        password: '',
+                        age: '',
+                        sex: '',
+                        hobby: [],
+                        city: '',
+                        descript: '',
+                        agree: false
+                    }
+                }
+            },
+            methods: {
+                submitUserInfo() {
+                    // 将用户信息直接转换为JSON字符串格式，通过ajax直接发送请求
+                    console.log(JSON.stringify(this.userInfo))
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

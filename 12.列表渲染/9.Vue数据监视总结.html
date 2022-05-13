@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue数据监视总结</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        Vue监视数据的原理：
+            1.vue会监视data中所有层次的数据（利用递归的方式逐层向下遍历）;
+
+            2.如何监测对象中的数据变化：
+                通过setter实现监视，且要在new Vue时就传入要监测的数据
+                    (1).对象中后追加的属性，Vue默认不做响应处理；
+                    (2).如需给后添加的属性做响应式，请使用如下API：
+                        Vue.set(target,propertyName/index,value)
+                        vm.$set(target,propertyName/index,value)
+            
+            3.如何监测数组中的数据：
+                通过包裹数组更新元素的方法实现，本质就是做了两件事：
+                    (1).调用原生对象的数组操作方法对数组进行更新（数组方法必须可以更改原数组）
+                    (2).重新解析模板，进而更新页面
+
+            4.在Vue修改数组中的某个元素一定要用如下方法：
+                1.使用这些可以更改原数组的API：push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+                2.Vue.set(target,index,value) 或 vm.$set(target,index,value)
+                3.filter()、slice()等数组方法，返回值虽然不能直接改变原数组，但是可以通过直接将新数组覆盖原数组
+                  以达到更改原数组的目的，从而实现响应式
+
+            特别注意：Vue.set() 和 vm.$set() 不能给 vm 或 vm 的根数据（data 和 _data）对象 添加属性！！！
+     -->
+
+    <div id="root">
+        <button @click="student.age++">年龄+1岁</button><br>
+        <button @click="addSex">添加性别属性，默认值：男</button><br>
+        <button @click="updataSex">修改性别</button><br>
+        <button @click="addFrend">在列表首位添加一个朋友</button><br>
+        <button @click="updataFrend">修改第一个朋友的名字为：张三</button><br>
+        <button @click="addHobby">添加一个爱好：开车</button><br>
+        <button @click="updataFirstHobby">修改第一个爱好：跳舞</button><br>
+        <h2>学生信息</h2>
+        <h3>姓名：{{student.name}}</h3>
+        <h3>年龄：{{student.age}}</h3>
+        <h3 v-if="student.sex">性别：{{student.sex}}</h3>
+        <h3>爱好：</h3>
+        <ul>
+            <li v-for="(item,index) in student.hobby">{{item}}</li>
+        </ul>
+
+        <h3>朋友们：</h3>
+        <ul>
+            <li v-for="(item,index) in student.frends">{{item.name}}--{{item.age}}</li>
+        </ul>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#root',
+            data() {
+                return {
+                    student: {
+                        name: '张三',
+                        age: 18,
+                        hobby: ['看电影', '玩游戏', '吃零食'],
+                        frends: [
+                            { name: 'jerry', age: 20 },
+                            { name: 'tom', age: 26 }
+                        ]
+                    }
+                }
+            },
+            methods: {
+                addSex() {
+                    // Vue.set(this.student, 'sex', '男');
+                    vm.$set(this.student, 'sex', '男')
+                },
+                updataSex() {
+                    // this.student.sex = '女';
+                    // Vue.set(this.student, 'sex', '女')
+                    vm.$set(this.student, 'sex', '女')
+                },
+                addFrend() {
+                    this.student.frends.unshift({ name: '马老师', age: 50 })
+
+                },
+                updataFrend() {
+                    // this.student.frends[0].name = '张三';
+                    // Vue.set(this.student.frends[0], 'name', '张三')
+                    vm.$set(this.student.frends[0], 'name', '张三')
+                },
+                addHobby() {
+                    this.student.hobby.unshift('开车')
+                },
+                updataFirstHobby() {
+                    // this.student.hobby.splice(0, 1, '跳舞')
+                    // Vue.set(this.student.hobby, 0, '跳舞')
+                    vm.$set(this.student.hobby, 0, '跳舞')
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
