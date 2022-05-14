@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        自定义指令：
+            一、定义方法：
+                1.局部指令：
+                    new Vue({
+                        directives:{指令名:{配置对象内容}}
+                    })
+                    或
+                    new Vue({
+                        directives:{指令名(){callback内容}}
+                    })
+                2.全局指令：
+                    Vue.directive(指令名，{配置对象内容})
+                    或 Vue.directive(指令名，callback)
+            
+            二、配置对象内容中常用的3个回调函数：
+                注意:自定义指令中的钩子函数 this 均指向 window 
+                1.bind():指令与元素成功绑定时；
+                2.inserted():指令所在的元素被插入页面时调用
+                3.updata():指令所在模板结构被重新解析时调用
+
+            三、自定义指令合适会被执行?
+                1.指令与节点元素成功绑定时(此时内容还未呈现到页面)
+                2.指令所在模板被重新解析时(模板中任意依赖属性发生变化即会重新解析模板)
+
+            四、备注：
+                1.指令定义时不加 v- ，但使用时要加 v-
+                2.指令名如果时多个单词时，要使用kebab-case(短横线)命名方式，不要用 camelCase(驼峰) 命名法
+
+            
+     -->
+
+    <!-- 完成案例:定义一个 v-big 指令,和v-text功能类似,但会把绑定的数值放大10倍 -->
+    <div id="root">
+        <h2>自定义指令_函数式</h2>
+        <h3>当前的n值式:<span v-text="n"></span></h3>
+        <!-- 局部自定义指令 -->
+        <h3>放大10倍的n值式:<span v-big="n"></span></h3>
+        <!-- 全局自定义指令 -->
+        <h3>放大100倍的n值式:<span v-big2="n"></span></h3>
+        <button @click="n++">点我n+1</button>
+    </div>
+
+    <script>
+        // 全局自定义指令:全局自定义指令必须定义在vue实例创建之前
+        Vue.directive('big2', function (element, binding) {
+            element.innerHTML = binding.value * 100;
+        })
+
+        new Vue({
+            el: '#root',
+            data() {
+                return {
+                    n: 1
+                }
+            },
+            // 定义局部自定义指令(函数式)
+            // 自定义指令何时会被调用:1.指令与节点元素成功绑定时(内容还未呈现到页面);2.指令所在的模板被重新解析时
+            directives: {
+
+                big(element, binding) {
+                    console.log(this) // window 自定义指令中的函数this指向 window
+                    element.innerHTML = binding.value * 10;
+                }
+
+            }
+        })
+    </script>
+</body>
+
+</html>

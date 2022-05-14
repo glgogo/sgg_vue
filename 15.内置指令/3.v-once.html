@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-once</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        v-once指令：
+            1.v-once所在节点在初次动态渲染后，就视为静态内容了
+            2.以后数据的改变不会引起v-once所在的结构的更新，可以用于优化性能
+
+            注意：注意区分v-once 与 事件修饰符 once 的区别，once为事件只触发一次，不要混淆
+     -->
+
+    <div id="root">
+        <div v-once>初始化的n值是：{{n}}</div>
+        <div>当前的n值是：{{n}}</div>
+        <button @click="n++">点我n+1</button>
+
+    </div>
+    <script>
+        new Vue({
+            el: '#root',
+            data() {
+                return {
+                    n: 1
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
