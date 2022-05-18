@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于VueComponent</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        关于VueComponent
+            1.school组件的本质时一个名为 VueComponent 的构造函数，且不是程序员定义的，时Vue.extend生成的
+
+            2.我们只需要写<School></School>或<School />，Vue解析时会帮我们创建 School组件的实例对象
+              即Vue帮我们执行的：new VueComponent(options)  注意：此处的options即组件的配置对象，包含data、template等
+
+            3.特别注意：每次调用Vue.extend，返回的都是一个全新的VueComponent!!!
+
+            4.关于this指向：
+                (1).组件配置中：
+                    data函数、methods中的函数、watch中的函数、computed中的函数，他们的this均是【VueComponent实例对象】
+                (2).new Vue()配置中：
+                    data函数、methods中的函数、watch中的函数、computed中的函数，他们的this均是【Vue实例对象】
+
+            5.VueComponent的实例对象，以后简称 vc （也称为：组件实例对象）
+              Vue的实例对象，以后简称为 vm
+     -->
+
+    <div id="root">
+        <School></School>
+        <Student></Student>
+    </div>
+
+    <script>
+        Vue.config.productionTip = false  //消除 生产环境下的默认 提示信息
+
+        // 定义学校组件
+        const School = Vue.extend({
+            data() {
+                return {
+                    name: '尚硅谷',
+                    address: '北京'
+                }
+            },
+            template: `
+                <div>
+                    <h3>学校名称：{{name}}</h3>    
+                    <h3>学校地址：{{address}}</h3>    
+                </div>
+            `
+        })
+
+        // 定义学生组件
+        const Student = Vue.extend({
+            name: 'Student',
+            data() {
+                return {
+                    name: '张三',
+                    age: 18,
+                    sex: '男'
+                }
+            },
+            template: `
+                <div>
+                    <h3>学生姓名：{{name}}</h3>    
+                    <h3>学生年龄：{{age}}</h3>    
+                    <h3>学生性别：{{sex}}</h3>    
+                    <button @click='showThis'>点击显示组件中的this指向</button>
+                </div>
+            `,
+            methods: {
+                showThis() {
+                    console.log(this) //组件中的this指向为 VueComponent 实例对象 vc
+                }
+            }
+        })
+
+        console.log(School)
+        // 输出一个如下构造函数
+        // ƒ VueComponent (options) {
+        //   this._init(options);
+        // }
+        console.log(School === Student)  // false  证明:每次调用VueComponent构造函数时,都会返回一个新的VueComponent构造函数
+
+
+        new Vue({
+            el: '#root',
+            components: {
+                School,
+                Student
+            }
+        })
+    </script>
+</body>
+
+</html>
