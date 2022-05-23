@@ -3,6 +3,10 @@ import Vue from 'vue'
 
 // 引入App组件，它是所有组件的父组件
 import App from './App'
+import plugins from './plugins'
+
+// 引入插件
+Vue.use(plugins)
 
 // 关闭vue的生产提示
 Vue.config.productionTip = false

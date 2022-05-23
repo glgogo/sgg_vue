@@ -106,4 +106,58 @@
           2.如果组件中生命周期函数中配置信息与mixin中配置信息发生冲突，那么两种冲突配置信息均会生效
 
 
+## plugins插件的使用
+    功能：用于曾强Vue
+    本质：包含install方法的一个对象，install的第一个参数时Vue，第二个以后的参数是插件使用者传递的数据。
+    定义插件：
+        对象.install = function(Vue,argument){
+            //1.添加全局过滤器
+            Vue.filter(……)
+
+            //2.添加全局指令
+            Vue.directiv(……)
+
+            //3.配置全局混入对象
+            Vue.mixin(……)
+
+            //4.在Vue原型上添加实例方法和属性
+            Vue.prototype.hello = function(){……}
+            Vue.prototype.xxx = yyy
+        }
+
+    插件的使用：在入口文件（main.js）中 使用 Vue.use(xxx)
+
+
+## scoped样式
+    作用：让样式在局部生效，防止命名相同导致样式冲突
+    写法：<style scoped>……</style>
+    扩展：style 标签中可以使用 lang='xxx' 指定样式的类型（xxx可以是less、sass等其他css语言）
+          使用lang定义非 css 样式后，需要按照解析less、sass解析插件
+
+
+## webStorage（浏览器本地存储）
+    1.存储内容大小一般支持5mb左右（不同浏览器可能不一样）
+    2.浏览器端通过Window.sessionStorage 和 Window.localStorage  属性实现本地存储机制
+    3.相关API:(XXXX代表session 或 local)
+        (1).xxxxstorage.setItem('key','value')
+            该方法接受一个键和值作为参数，会把键值对添加到存储中，如果键名存在，则更新其对应的值
+        
+        (2).xxxxStorage.getItem('key')
+            该方法接收一个键名作为参数，返回键名对应的值（JSON格式字符串，可使用JSON.parse进行转换）
+
+        (3).xxxxStorage.removeItem('key')
+            该方法接收一个键名作为参数，并把该键名从本地存储中删除
+
+        (4).xxxxStorage.clear()
+            该方法无参数，可清空存储中所有数据
+
+    4.备注：
+        (1).SessionStorage存储的内容会随着浏览器窗口关闭而消失
+        (2).LocalStorage存储的内容，需要手动清除才会消失
+        (3).xxxxStorage.getItem('key')，如果key对应的value获取不到，那么getItem的返回值是 null
+        (4).JSON.parse(null)的结果依然是null
+
+
+
+
 

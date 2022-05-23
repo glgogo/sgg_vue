@@ -26,8 +26,11 @@
         components:{HeaderTodo,TodoList,FooterTodo},
         data(){
             return {
-                // 从本地存储动态获取已保存的 待办事项
-                todos:JSON.parse(localStorage.getItem('todos')) || []
+                todos:[
+                    {id:'001',todo:'吃饭',done:true},
+                    {id:'002',todo:'学习',done:false},
+                    {id:'003',todo:'睡觉',done:false}
+                ]
             }
         },
         methods:{
@@ -62,16 +65,19 @@
             }
             
         },
-        watch:{
-            todos:{
-                immediate:true,
-                deep:true,
-                handler(value){
-                    localStorage.setItem('todos',JSON.stringify(value))
-                }
-            }
-        },
+        // watch:{
+        //     todos:{
+        //         immediate:true,
+        //         deep:true,
+        //         handler(value){
+        //             localStorage.setItem('todos',JSON.stringify(this.todos))
+        //         }
+        //     }
+        // },
 
+        // mounted(){
+        //     this.todos = JSON.parse(localStorage.getItem('todos'))
+        // }
     }
 </script>
 
